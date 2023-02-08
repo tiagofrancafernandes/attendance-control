@@ -20,5 +20,16 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        $notProductionSeeders = [
+            ProjectSeeder::class,
+            SurveySeeder::class,
+        ];
+
+        if (!app()->environment(['production'])) {
+            foreach ($notProductionSeeders as $seeder) {
+                $this->call($seeder);
+            }
+        }
     }
 }
