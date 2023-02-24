@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             ProjectSeeder::class,
             SurveySeeder::class,
             SurveyTypeSeeder::class,
+            CampaignSeeder::class,
         ];
 
         if (!app()->environment(['production'])) {

@@ -57,6 +57,10 @@ class SurveyFactory extends Factory
                 SurveyType::factory(),
                 \null,
             ]),
+            'tags' => Arr::random([
+                \null,
+                \fake()->words(\rand(2, 6)),
+            ]),
         ];
     }
 }

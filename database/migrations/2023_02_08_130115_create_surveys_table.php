@@ -18,6 +18,8 @@ return new class() extends Migration {
             $table->longText('description')->nullable();
             $table->uuid('created_by')->nullable();
             $table->uuid('project_id');
+            $table->uuid('campaign_id')->nullable();
+            $table->json('tags')->nullable();
             $table->uuid('survey_type')->nullable(); // If null, can be setted fills, rules, validations and reports
             $table->boolean('active')->nullable()->default(true);
             $table->boolean('published')->nullable()->default(false);
@@ -26,8 +28,12 @@ return new class() extends Migration {
             $table->timestamps();
 
             $table->index('id');
+
             $table->foreign('project_id')->references('id')
                 ->on('projects')->onDelete('cascade'); //cascade|set null
+
+            $table->foreign('campaign_id')->references('id')
+                ->on('campaigns')->onDelete('set null');
 
             $table->foreign('survey_type')->references('id')
                 ->on('survey_types')->onDelete('set null');

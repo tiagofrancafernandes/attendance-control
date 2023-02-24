@@ -13,8 +13,21 @@ return new class() extends Migration {
     public function up()
     {
         Schema::create('campaigns', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->unique();
+            $table->string('title');
+            $table->longText('description')->nullable();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('project_id');
+            $table->json('tags')->nullable();
+            $table->boolean('active')->nullable()->default(true);
             $table->timestamps();
+
+            $table->index('id');
+            $table->foreign('project_id')->references('id')
+                ->on('projects')->onDelete('cascade');
+
+            $table->foreign('created_by')->references('id')
+                ->on('users')->onDelete('set null');
         });
     }
 

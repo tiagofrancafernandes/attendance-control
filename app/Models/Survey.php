@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * App\Models\Survey
@@ -50,8 +51,10 @@ class Survey extends Model
         'description',
         'created_by',
         'project_id',
+        'campaign_id',
         'survey_type',
         'active',
+        'tags',
         'published',
         'will_start_in',
         'will_finish_in',
@@ -62,6 +65,7 @@ class Survey extends Model
         'published' => 'boolean',
         'will_start_in' => 'datetime',
         'will_finish_in' => 'datetime',
+        'tags' => AsCollection::class,
     ];
 
     protected $dates = [
@@ -77,6 +81,16 @@ class Survey extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * Get the campaign that owns the Survey
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function campaign(): BelongsTo
+    {
+        return $this->belongsTo(Campaign::class);
     }
 
     /**
