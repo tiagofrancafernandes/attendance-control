@@ -20,7 +20,7 @@ class SurveyTypeFactory extends Factory
     {
         return [
             'title' => \sprintf('Type ', \fake()->words(3, true)),
-            'template' => \null,
+            'initial_template' => \null,
             'project_id' => Arr::random([null, Project::factory()]),
             'is_global' => fn ($attr) => !($attr['project_id'] ?? \null) ? true : (bool) (rand() % 2),
             'active' => (bool) (rand() % 2),

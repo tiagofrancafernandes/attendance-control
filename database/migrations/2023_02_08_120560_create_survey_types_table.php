@@ -15,7 +15,7 @@ return new class() extends Migration {
         Schema::create('survey_types', function (Blueprint $table) {
             $table->uuid('id')->unique();
             $table->string('title'); // NPS, Feedback, etc
-            $table->string('template')->nullable();         // TODO: PHP config file like,  Class or JSON schema
+            $table->string('initial_template')->nullable(); // json_file:schema_01.json | php_config:schema_01.php | json:{...}
             $table->uuid('project_id')->nullable();         // If null, the template can be global
             $table->boolean('is_global')->default(false);   // Global can be listed by anyone (project_id must be null)
             $table->boolean('active')->default(true);

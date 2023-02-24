@@ -61,6 +61,9 @@ class SurveyFactory extends Factory
                 \null,
                 \fake()->words(\rand(2, 6)),
             ]),
+            'questions' => Arr::random([
+                require \resource_path('survay_templates/level-of-satisfaction-01.php'),
+            ]),
         ];
     }
 }

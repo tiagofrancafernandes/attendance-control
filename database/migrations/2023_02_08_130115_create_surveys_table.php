@@ -21,6 +21,7 @@ return new class() extends Migration {
             $table->uuid('campaign_id')->nullable();
             $table->json('tags')->nullable();
             $table->uuid('survey_type')->nullable(); // If null, can be setted fills, rules, validations and reports
+            $table->json('questions'); // Use survey_type template if have it. TODO: Create a questions validator
             $table->boolean('active')->nullable()->default(true);
             $table->boolean('published')->nullable()->default(false);
             $table->datetime('will_start_in')->nullable();

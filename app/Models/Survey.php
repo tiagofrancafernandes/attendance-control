@@ -53,6 +53,7 @@ class Survey extends Model
         'project_id',
         'campaign_id',
         'survey_type',
+        'questions',
         'active',
         'tags',
         'published',
@@ -66,6 +67,7 @@ class Survey extends Model
         'will_start_in' => 'datetime',
         'will_finish_in' => 'datetime',
         'tags' => AsCollection::class,
+        'questions' => AsCollection::class,
     ];
 
     protected $dates = [

@@ -14,7 +14,7 @@ class SurveyType extends Model
 
     protected $fillable = [
         'title',
-        'template',
+        'initial_template', // json_file:schema_01.json | php_config:schema_01.php | json:{...}
         'project_id',
         'is_global',
         'active',
