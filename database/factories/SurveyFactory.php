@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use App\Models\Project;
+use App\Models\SurveyType;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -49,6 +50,13 @@ class SurveyFactory extends Factory
                     'created_by' => $attr['created_by'],
                 ])
                 : Project::factory(),
+            'survey_type' => fn ($attr) => Arr::random([
+                SurveyType::factory(state: [
+                    'project_id' => $attr['project_id'],
+                ]),
+                SurveyType::factory(),
+                \null,
+            ]),
         ];
     }
 }

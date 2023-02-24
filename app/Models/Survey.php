@@ -50,6 +50,7 @@ class Survey extends Model
         'description',
         'created_by',
         'project_id',
+        'survey_type',
         'active',
         'published',
         'will_start_in',
@@ -76,6 +77,16 @@ class Survey extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * Get the surveyType that owns the Survey
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function surveyType(): BelongsTo
+    {
+        return $this->belongsTo(SurveyType::class, 'survey_type', 'id');
     }
 
     /**

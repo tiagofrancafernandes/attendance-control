@@ -18,6 +18,7 @@ return new class() extends Migration {
             $table->longText('description')->nullable();
             $table->uuid('created_by')->nullable();
             $table->uuid('project_id');
+            $table->uuid('survey_type')->nullable(); // If null, can be setted fills, rules, validations and reports
             $table->boolean('active')->nullable()->default(true);
             $table->boolean('published')->nullable()->default(false);
             $table->datetime('will_start_in')->nullable();
@@ -27,6 +28,9 @@ return new class() extends Migration {
             $table->index('id');
             $table->foreign('project_id')->references('id')
                 ->on('projects')->onDelete('cascade'); //cascade|set null
+
+            $table->foreign('survey_type')->references('id')
+                ->on('survey_types')->onDelete('set null');
 
             $table->foreign('created_by')->references('id')
                 ->on('users')->onDelete('set null');
