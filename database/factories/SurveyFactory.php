@@ -63,6 +63,7 @@ class SurveyFactory extends Factory
             ]),
             'questions' => Arr::random([
                 require \resource_path('survay_templates/level-of-satisfaction-01.php'),
+                require \resource_path('survay_templates/nps-01.php'),
             ]),
         ];
     }

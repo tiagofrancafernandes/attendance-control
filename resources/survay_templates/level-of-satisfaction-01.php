@@ -1,56 +1,103 @@
 <?php
 
 return [
-    [
-        "question" => [
-            "default" => "Level of satisfaction",
-            "pt-br" => "Nível de satisfação",
+    'title' => [
+        'default' => 'How do you rate your experience?',
+        'pt-br' => 'Como você avalia sua experiência?',
+    ],
+    'inputs' => [
+        [
+            'question' => [
+                'default' => 'Level of satisfaction',
+                'pt-br' => 'Nível de satisfação',
+            ],
+            'required' => true,
+            'name' => 'vote',
+            'validation' => [
+                'required',
+                'integer',
+                'in:1,2,3,4,5',
+            ],
+            // 'placeholder' => [
+            //     'default' => '...',
+            //     'pt-br' => '...',
+            // ],
+            'type' => 'select', // emoji|binary_option|single_line_text|multi_line_text|select_list
+
+            // if 'type' are 'select_list' or 'amoji'
+            'multi_select' => false, // TRUE=checkbox/multi_select | FALSE=radio/select
+            'emoji_options' => [
+                // 😍😔🤩🥰🙂👏😭😐😕😶😠😦👌👎👍
+                [
+                    'emoji' => '😍',
+                    'label' => [
+                        'default' => 'I love',
+                        'pt-br' => 'Amo',
+                    ],
+                    'value' => 5,
+                ],
+                [
+                    'emoji' => '🙂',
+                    'label' => [
+                        'default' => 'I like',
+                        'pt-br' => 'Gosto',
+                    ],
+                    'value' => 4,
+                ],
+                [
+                    'emoji' => '😐',
+                    'label' => [
+                        'default' => 'Whatever',
+                        'pt-br' => 'Tanto faz',
+                    ],
+                    'value' => 3,
+                ],
+                [
+                    'emoji' => '😕',
+                    'label' => [
+                        'default' => "I don't like",
+                        'pt-br' => 'Não gosto',
+                    ],
+                    'value' => 2,
+                ],
+                [
+                    'emoji' => '😠',
+                    'label' => [
+                        'default' => 'I hate',
+                        'pt-br' => 'Odiei',
+                    ],
+                    'value' => 1,
+                ],
+            ],
+            'help_message' => [
+                'default' => '...',
+                'pt-br' => '...',
+            ],
         ],
-        "name" => "vote",
-        "type" => "emoji", // emoji|binary_option|single_line_text|multi_line_text|range
-        "multi_select" => false, // TRUE=checkbox | FALSE=radio
-        "emoji_options" => [
-            // 😍😔🤩🥰🙂👏😭😐😕😶😠😦👌👎👍
-            [
-                "emoji" => "😍",
-                "label" => [
-                    "default" => "I love",
-                    "pt-br" => "Amo",
-                ],
-                "value" => 5,
+        [
+            'question' => [
+                'default' => 'Would you like to add a message to your reply?',
+                'pt-br' => 'Gostaria de adicionar uma mensagem à sua resposta?',
             ],
-            [
-                "emoji" => "🙂",
-                "label" => [
-                    "default" => "I like",
-                    "pt-br" => "Gosto",
-                ],
-                "value" => 4,
+            'validation' => [
+                'nullable',
+                'string',
+                'min:5',
+                'max:1000',
             ],
-            [
-                "emoji" => "😐",
-                "label" => [
-                    "default" => "Whatever",
-                    "pt-br" => "Tanto faz",
-                ],
-                "value" => 3,
+            'required' => false,
+            'name' => 'message',
+            'min' => 5,
+            'max' => 1000,
+            'type' => 'multi_line_text',
+            'placeholder' => [
+                'default' => 'Your message here...',
+                'pt-br' => 'Sua mensagem aqui...',
             ],
-            [
-                "emoji" => "😕",
-                "label" => [
-                    "default" => "I don't like",
-                    "pt-br" => "Não gosto",
-                ],
-                "value" => 2,
+            'help_message' => [
+                'default' => '...',
+                'pt-br' => '...',
             ],
-            [
-                "emoji" => "😠",
-                "label" => [
-                    "default" => "I hate",
-                    "pt-br" => "Odiei",
-                ],
-                "value" => 1,
-            ],
-        ]
+        ],
     ]
 ];
