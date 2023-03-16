@@ -82,17 +82,8 @@
         "test:style": [
             "composer style:check"
         ],
-        "post-package-install": [
-            "@php -r \"echo 'post-package-install';\"",
-            "composer pint:changes",
-            "composer style:fix"
-        ],
+        "post-package-install": [],
         "post-package-update": [
-            "@php -r \"echo 'post-package-update';\"",
-            "composer pint:changes"
-        ],
-        "post-install-cmd": [
-            "@php -r \"echo 'post-install-cmd';\"",
             "composer pint:changes"
         ]
     },
