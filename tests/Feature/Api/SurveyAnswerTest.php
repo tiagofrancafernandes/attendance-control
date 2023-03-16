@@ -13,6 +13,7 @@ class SurveyAnswerTest extends TestCase
     /**
      *
      * @test
+     *
      * put an answer to survey withow required values
      *
      * @return void
@@ -252,6 +253,7 @@ class SurveyAnswerTest extends TestCase
         ];
 
         $inc = 1;
+
         foreach ($ratings as $rating => $count) {
             if (!$count || !is_integer($count)) {
                 continue;
