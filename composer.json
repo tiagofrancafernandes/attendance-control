@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
@@ -56,21 +59,38 @@
             "composer style:fix"
         ],
         "post-package-update": [
-            "composer pint:changes",
-            "composer style:fix"
+            "composer pint:changes"
         ],
         "post-install-cmd": [
-            "composer pint:changes",
-            "composer style:fix"
+            "composer pint:changes"
         ],
-        "style:fix": [
+        "pint": [
             "@php ./vendor/bin/pint --config ./pint.json"
         ],
         "pint:changes": [
             "@php ./vendor/bin/pint --config ./pint.json --dirty"
         ],
+        "style:fix": [
+            "composer pint"
+        ],
+        "style:check": [
+            "@php ./vendor/bin/pint --config ./pint.json --test"
+        ],
         "dev": [
             "composer style:fix"
+        ],
+        "test:style": [
+            "composer style:check"
+        ],
+        "serve": [
+            "@php artisan serve"
+        ],
+        "serve:all": [
+            "@php artisan serve --host=0.0.0.0"
+        ],
+        "test": [
+            "composer pint:check",
+            "@php artisan test"
         ]
     },
     "extra": {
