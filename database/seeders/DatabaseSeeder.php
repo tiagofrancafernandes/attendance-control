@@ -24,10 +24,11 @@ class DatabaseSeeder extends Seeder
 
         $notProductionSeeders = [
             ProjectSeeder::class,
-            SurveySeeder::class,
             SurveyTypeSeeder::class,
+            // SurveySeeder::class,
             CampaignSeeder::class,
-            SurveyAnswerSeeder::class,
+            // SurveyAnswerSeeder::class,
+            SurveyAnswerConsolidationSeeder::class,
         ];
 
         if (!app()->environment(['production'])) {

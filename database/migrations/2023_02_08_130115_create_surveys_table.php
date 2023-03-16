@@ -25,6 +25,8 @@ return new class() extends Migration {
             $table->boolean('active')->nullable()->default(true);
             $table->boolean('published')->nullable()->default(false);
             $table->datetime('will_start_in')->nullable();
+            $table->datetime('started_at')->nullable();
+            $table->boolean('limit_to_1_answer')->nullable()->default(false);
             $table->datetime('will_finish_in')->nullable();
             $table->timestamps();
 

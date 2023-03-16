@@ -29,6 +29,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Project whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Project whereOwnerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Project whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Survey> $surveys
+ * @property-read int|null $surveys_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Survey> $surveys
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Survey> $surveys
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Survey> $surveys
  * @mixin \Eloquent
  */
 class Project extends Model

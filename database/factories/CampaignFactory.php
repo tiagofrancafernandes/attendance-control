@@ -21,7 +21,7 @@ class CampaignFactory extends Factory
     public function definition()
     {
         return [
-            'title' => \sprintf('Campaign ', Str::random(5)),
+            'title' => \sprintf('Campaign %s', Str::random(5)),
             'description' => fake()->boolean(70) ? fake()->words(6, true) : \null,
             'created_by' => User::factory(),
             'tags' => Arr::random([

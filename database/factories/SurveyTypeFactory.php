@@ -19,7 +19,7 @@ class SurveyTypeFactory extends Factory
     public function definition()
     {
         return [
-            'title' => \sprintf('Type ', \fake()->words(3, true)),
+            'title' => \sprintf('Type  %s', \fake()->words(3, true)),
             'initial_template' => \null,
             'project_id' => Arr::random([null, Project::factory()]),
             'is_global' => fn ($attr) => !($attr['project_id'] ?? \null) ? true : (bool) (rand() % 2),

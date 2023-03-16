@@ -7,6 +7,32 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * App\Models\SurveyType
+ *
+ * @property string $id
+ * @property string $title
+ * @property string|null $initial_template
+ * @property string|null $project_id
+ * @property bool $is_global
+ * @property bool $active
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Project|null $project
+ * @method static \Database\Factories\SurveyTypeFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|SurveyType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SurveyType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SurveyType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SurveyType whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SurveyType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SurveyType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SurveyType whereInitialTemplate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SurveyType whereIsGlobal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SurveyType whereProjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SurveyType whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SurveyType whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class SurveyType extends Model
 {
     use HasFactory;

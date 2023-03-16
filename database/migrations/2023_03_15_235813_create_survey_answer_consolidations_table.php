@@ -12,13 +12,10 @@ return new class() extends Migration {
      */
     public function up()
     {
-        Schema::create('survey_answers', function (Blueprint $table) {
+        Schema::create('survey_answer_consolidations', function (Blueprint $table) {
             $table->uuid('id')->unique();
             $table->uuid('survey_id');
-            $table->uuid('campaign_id')->nullable();
-            $table->json('answer_data');
-            $table->string('flag_01')->nullable(); // Way to identify the responder
-            $table->string('flag_02')->nullable(); // Way to identify the responder
+            $table->json('report_data');
             $table->timestamps();
 
             $table->index('id');
@@ -26,9 +23,6 @@ return new class() extends Migration {
 
             $table->foreign('survey_id')->references('id')
                 ->on('surveys')->onDelete('cascade'); //cascade|set null
-
-            $table->foreign('campaign_id')->references('id')
-                ->on('campaigns')->onDelete('set null');
         });
     }
 
@@ -39,6 +33,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('survey_answers');
+        Schema::dropIfExists('survey_answer_consolidations');
     }
 };

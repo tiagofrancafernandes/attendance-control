@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,6 +40,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereWillFinishIn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereWillStartIn($value)
+ * @property string|null $campaign_id
+ * @property AsCollection|null $tags
+ * @property string|null $survey_type
+ * @property AsCollection $questions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SurveyAnswer> $answers
+ * @property-read int|null $answers_count
+ * @property-read \App\Models\Campaign|null $campaign
+ * @property-read \App\Models\SurveyType|null $surveyType
+ * @method static \Illuminate\Database\Eloquent\Builder|Survey whereCampaignId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Survey whereQuestions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Survey whereSurveyType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Survey whereTags($value)
+ * @property \Illuminate\Support\Carbon|null $started_at
+ * @property bool|null $limit_to_1_answer
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SurveyAnswer> $answers
+ * @method static \Illuminate\Database\Eloquent\Builder|Survey whereLimitTo1Answer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Survey whereStartedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SurveyAnswer> $answers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SurveyAnswer> $answers
  * @mixin \Eloquent
  */
 class Survey extends Model
@@ -59,6 +79,8 @@ class Survey extends Model
         'published',
         'will_start_in',
         'will_finish_in',
+        'started_at',
+        'limit_to_1_answer',
     ];
 
     protected $casts = [
@@ -68,11 +90,14 @@ class Survey extends Model
         'will_finish_in' => 'datetime',
         'tags' => AsCollection::class,
         'questions' => AsCollection::class,
+        'started_at' => 'datetime',
+        'limit_to_1_answer' => 'boolean',
     ];
 
     protected $dates = [
         'will_start_in',
         'will_finish_in',
+        'started_at',
     ];
 
     /**
@@ -113,5 +138,15 @@ class Survey extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    /**
+     * Get all of the answers for the Survey
+     *
+     * @return HasMany
+     */
+    public function answers(): HasMany
+    {
+        return $this->hasMany(SurveyAnswer::class);
     }
 }

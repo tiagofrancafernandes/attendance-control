@@ -22,7 +22,7 @@ class SurveyFactory extends Factory
     public function definition()
     {
         return [
-            'name' => \sprintf('Survey ', Str::random(5)),
+            'name' => \sprintf('Survey %s', Str::random(5)),
             'created_by' => User::factory(),
             'description' => fake()->boolean(70) ? fake()->words(6, true) : \null,
             'active' => fake()->boolean(90),
@@ -62,8 +62,17 @@ class SurveyFactory extends Factory
                 \fake()->words(\rand(2, 6)),
             ]),
             'questions' => Arr::random([
-                require \resource_path('survay_templates/level-of-satisfaction-01.php'),
+                // require \resource_path('survay_templates/level-of-satisfaction-01.php'),
                 require \resource_path('survay_templates/nps-01.php'),
+            ]),
+            'started_at' => fn ($attr) => Arr::random([
+                ($attr['will_start_in'] ?? null),
+                null, null, null, null,
+            ]),
+            'limit_to_1_answer' => Arr::random([
+                (bool) (\rand() % 2),
+                (bool) (\rand() % 2),
+                null, null, null, null,
             ]),
         ];
     }

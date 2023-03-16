@@ -19,7 +19,7 @@ class ProjectFactory extends Factory
     public function definition()
     {
         return [
-            'name' => \sprintf('Project ', Str::random(5)),
+            'name' => \sprintf('Project %s', Str::random(5)),
             'created_by' => User::factory(),
             'owner_id' => fn ($attr) => ($attr['created_by'] ?? null) ?: User::factory(),
         ];
