@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
@@ -42,7 +45,7 @@
             "composer pint:changes"
         ],
         "post-update-cmd": [
-            "@php ./vendor/bin/pint --config ./pint.json --dirty",
+            "./pint-cmd.sh --dirty",
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
@@ -51,26 +54,46 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ],
+        "pint": [
+            "./pint-cmd.sh"
+        ],
+        "pint:changes": [
+            "./pint-cmd.sh --dirty"
+        ],
+        "style:fix": [
+            "composer pint"
+        ],
+        "style:check": [
+            "./pint-cmd.sh --test"
+        ],
+        "dev": [
+            "composer style:fix"
+        ],
+        "test:style": [
+            "composer style:check"
+        ],
+        "serve": [
+            "@php artisan serve"
+        ],
+        "serve:all": [
+            "@php artisan serve --host=0.0.0.0"
+        ],
+        "test": [
+            "composer pint:check",
+            "@php artisan test"
+        ],
         "post-package-install": [
+            "@php -r \"echo 'post-package-install';\"",
             "composer pint:changes",
             "composer style:fix"
         ],
         "post-package-update": [
-            "composer pint:changes",
-            "composer style:fix"
+            "@php -r \"echo 'post-package-update';\"",
+            "composer pint:changes"
         ],
         "post-install-cmd": [
-            "composer pint:changes",
-            "composer style:fix"
-        ],
-        "style:fix": [
-            "@php ./vendor/bin/pint --config ./pint.json"
-        ],
-        "pint:changes": [
-            "@php ./vendor/bin/pint --config ./pint.json --dirty"
-        ],
-        "dev": [
-            "composer style:fix"
+            "@php -r \"echo 'post-install-cmd';\"",
+            "composer pint:changes"
         ]
     },
     "extra": {
