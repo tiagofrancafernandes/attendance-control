@@ -68,6 +68,9 @@
         ],
         "pint:changes": [
             "@php ./vendor/bin/pint --config ./pint.json --dirty"
+        ],
+        "dev": [
+            "composer style:fix"
         ]
     },
     "extra": {

@@ -73,6 +73,7 @@ class SurveyAnswerController extends Controller
             }
 
             $input = \collect($input);
+
             if (!$input->has('name')) {
                 return;
             }
