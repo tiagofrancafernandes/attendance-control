@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Survey;
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,10 +22,11 @@ class SurveyAnswerFactory extends Factory
             'survey_id' => Survey::factory(),
             'campaign_id' => \null,
             'answer_data' => [
-                'question_01' => \fake()->words(5, true),
-                'question_02' => \fake()->words(rand(3, 9), true),
-                'question_03' => \fake()->words(rand(3, 9), true),
-                'question_long' => \fake()->paragraphs(asText: true),
+                'rating' => \rand(0, 10),
+                'message' => Arr::random([
+                    \null, \null, \null, \null,
+                    \fake()->words(rand(3, 6), true),
+                ]),
             ],
             'flag_01' => 'via_faker',
             'flag_02' => 'client_id_' . rand(8777, 11878),

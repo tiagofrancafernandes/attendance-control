@@ -17,6 +17,15 @@ return [
                 'in:0,1,2,3,4,5,6,7,8,9,10',
             ],
             'required' => true,
+
+            /*
+                'key_for_reports'
+                // For chart graphs etc
+                'required' NEED BE =true
+                'type' NEED BE one of select|binary_option|single_line_text|select_list
+                IF 'type' select|select_list NEED BE multi_select=false
+             */
+            'key_for_reports' => true,
             'name' => 'rating',
             'type' => 'select', // emoji|binary_option|single_line_text|multi_line_text|select_list
 

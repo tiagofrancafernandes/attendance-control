@@ -12,6 +12,16 @@ return [
                 'pt-br' => 'Nível de satisfação',
             ],
             'required' => true,
+
+            /*
+                'key_for_reports'
+                // For chart graphs etc
+                'required' NEED BE =true
+                'type' NEED BE one of select|binary_option|single_line_text|select_list
+                IF 'type' select|select_list NEED BE multi_select=false
+             */
+            'key_for_reports' => true, // Need be required=true
+
             'name' => 'vote',
             'validation' => [
                 'required',

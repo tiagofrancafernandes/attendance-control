@@ -161,4 +161,28 @@ class SurveyAnswerController extends Controller
 
         return response()->json($reponse, $reponseStatus ?: 200);
     }
+
+    /**
+     * function surveyResultList
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function surveyResultList(Request $request): JsonResponse
+    {
+        $request->validate([
+            'survey_id' => 'required|uuid',
+        ]);
+
+        $survey = Survey::whereId($request->input('survey_id'))->first();
+
+        if (!$survey) {
+            return response()->json([], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $survey->getResultList(true),
+        ], 200);
+    }
 }

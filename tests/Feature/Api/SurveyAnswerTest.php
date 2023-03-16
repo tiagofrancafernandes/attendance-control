@@ -57,7 +57,7 @@ class SurveyAnswerTest extends TestCase
     public function putAnAnswerToSurvey()
     {
         $survey = Survey::factory()->createOne([
-            'questions' => require \resource_path('survay_templates/level-of-satisfaction-01.php')
+            'questions' => require \resource_path('survay_templates/nps-01.php')
         ]);
 
         /**
@@ -67,7 +67,7 @@ class SurveyAnswerTest extends TestCase
             \route('surveys.new_answer'),
             [
                 'survey_id' => $survey->id,
-                'vote' => rand(1, 5),
+                'rating' => \rand(0, 10), // NPS
                 'flag_01' => 'cli_0123',
                 'flag_02' => 'tdd_test',
                 'message' => Str::random(10),
@@ -100,7 +100,7 @@ class SurveyAnswerTest extends TestCase
     public function validateFlagOnAnswer()
     {
         $survey = Survey::factory()->createOne([
-            'questions' => require \resource_path('survay_templates/level-of-satisfaction-01.php'),
+            'questions' => require \resource_path('survay_templates/nps-01.php'),
             'limit_to_1_answer' => \true,
         ]);
 
@@ -108,13 +108,14 @@ class SurveyAnswerTest extends TestCase
 
         $postData = [
             'survey_id' => $survey->id,
-            'vote' => rand(1, 5),
+            'rating' => \rand(0, 10), // NPS
             'flag_01' => $flag_01,
             'flag_02' => $flag_02,
             'message' => Str::random(10),
         ];
 
         $survey->answers()->create([
+            'survey_id' => $survey->id,
             'flag_01' => $flag_01,
             'flag_02' => $flag_02,
             'answer_data' => $postData,
@@ -147,19 +148,20 @@ class SurveyAnswerTest extends TestCase
         $flag_02 = 'tdd_test|oneAnsuer';
 
         $survey = Survey::factory()->createOne([
-            'questions' => require \resource_path('survay_templates/level-of-satisfaction-01.php'),
+            'questions' => require \resource_path('survay_templates/nps-01.php'),
             'limit_to_1_answer' => \true,
         ]);
 
         $postData = [
             'survey_id' => $survey->id,
-            'vote' => rand(1, 5),
+            'rating' => \rand(0, 10), // NPS
             'flag_01' => $flag_01,
             'flag_02' => $flag_02,
             'message' => Str::random(10),
         ];
 
         $survey->answers()->create([
+            'survey_id' => $survey->id,
             'flag_01' => $flag_01,
             'flag_02' => $flag_02,
             'answer_data' => $postData,
@@ -189,22 +191,23 @@ class SurveyAnswerTest extends TestCase
     public function validateHashOnFlagInputAnswer()
     {
         $flag_01 = 'cli_789';
-        $flag_02 = 'tdd_test|oneAnsuer';
+        $flag_02 = 'tdd_test|HashOnFlag';
 
         $survey = Survey::factory()->createOne([
-            'questions' => require \resource_path('survay_templates/level-of-satisfaction-01.php'),
+            'questions' => require \resource_path('survay_templates/nps-01.php'),
             'limit_to_1_answer' => \true,
         ]);
 
         $postData = [
             'survey_id' => $survey->id,
-            'vote' => rand(1, 5),
+            'rating' => \rand(0, 10), // NPS
             'hflag_01' => \base64_encode($flag_01),
             'hflag_02' => \base64_encode($flag_02),
             'message' => Str::random(10),
         ];
 
         $survey->answers()->create([
+            'survey_id' => $survey->id,
             'flag_01' => $flag_01,
             'flag_02' => $flag_02,
             'answer_data' => $postData,
@@ -223,5 +226,90 @@ class SurveyAnswerTest extends TestCase
         $response->assertInvalid([
             'answered' => 'An answer has already been sent previously.',
         ]);
+    }
+
+    /**
+     *
+     * @test
+     *
+     * @return void
+     */
+    public function getSurveyResultList()
+    {
+        $survey = Survey::factory()->createOne([
+            'questions' => require \resource_path('survay_templates/nps-01.php'),
+            'limit_to_1_answer' => \true,
+        ]);
+
+        $ratings = [
+            0 => 5,
+            2 => 4,
+            3 => 1,
+            5 => 5,
+            7 => 9,
+            9 => 10,
+            10 => 20,
+        ];
+
+        $inc = 1;
+        foreach ($ratings as $rating => $count) {
+            if (!$count || !is_integer($count)) {
+                continue;
+            }
+
+            foreach (range(1, $count) as $ii) {
+                $postData = [
+                    'survey_id' => $survey->id,
+                    'rating' => $rating, // NPS
+                    'flag_01' => "cli_997{$inc}{$ii}",
+                    'flag_02' => 'tdd_test|getSurveyResultList',
+                    'message' => null,
+                ];
+
+                $survey->answers()->create(
+                    \array_merge(
+                        $postData,
+                        [
+                            'answer_data' => $postData,
+                        ]
+                    )
+                );
+
+                $inc++;
+            }
+        }
+
+        /**
+         * @var TestResponse $response
+         */
+        $response = $this->post(
+            \route('surveys.result_list'),
+            ['survey_id' => $survey->id, ]
+        );
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('success', true);
+        $response->assertJsonCount(2);
+        $response->assertJsonCount(3, 'data');
+
+        $response->assertJsonPath('data.answer_values.rating.0', 5);
+        $response->assertJsonPath('data.answer_values.rating.2', 4);
+        $response->assertJsonPath('data.answer_values.rating.3', 1);
+        $response->assertJsonPath('data.answer_values.rating.5', 5);
+        $response->assertJsonPath('data.answer_values.rating.7', 9);
+        $response->assertJsonPath('data.answer_values.rating.9', 10);
+        $response->assertJsonPath('data.answer_values.rating.10', 20);
+
+        $response->assertJsonPath('data.surveyId', fn ($item) => \is_null($item) || Str::isUuid($item));
+        $response->assertJson(
+            fn (AssertableJson $json) =>
+            $json
+                ->whereAllType([
+                    'data' => 'array',
+                    'data.answer_values' => 'array',
+                    'data.answer_values.rating' => 'array',
+                    'data.answerCount' => 'integer',
+                ])->etc()
+        );
     }
 }

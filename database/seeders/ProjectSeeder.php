@@ -17,7 +17,7 @@ class ProjectSeeder extends Seeder
     {
         Project::factory(10)->create()->each(
             fn (Project $project) => Survey::factory(
-                rand(2, 5),
+                2,
                 [
                     'project_id' => $project->id,
                 ]

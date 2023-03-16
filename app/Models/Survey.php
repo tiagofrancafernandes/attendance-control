@@ -149,4 +149,26 @@ class Survey extends Model
     {
         return $this->hasMany(SurveyAnswer::class);
     }
+
+    /**
+     * function getQuestions
+     *
+     * @return SurveyQuestions
+     */
+    public function getQuestions(): SurveyQuestions
+    {
+        return new SurveyQuestions($this);
+    }
+
+    /**
+     * function getResultList
+     *
+     * @param ?bool $undot
+     *
+     * @return mixed
+     */
+    public function getResultList(?bool $undot = false): mixed
+    {
+        return $this->getQuestions()->resultList($undot);
+    }
 }
