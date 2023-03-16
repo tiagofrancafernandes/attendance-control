@@ -69,9 +69,6 @@
         "dev": [
             "composer style:fix"
         ],
-        "test:style": [
-            "composer style:check"
-        ],
         "serve": [
             "@php artisan serve"
         ],
@@ -81,6 +78,9 @@
         "test": [
             "composer pint:check",
             "@php artisan test"
+        ],
+        "test:style": [
+            "composer style:check"
         ],
         "post-package-install": [
             "@php -r \"echo 'post-package-install';\"",
