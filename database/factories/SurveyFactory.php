@@ -61,19 +61,12 @@ class SurveyFactory extends Factory
                 \null,
                 \fake()->words(\rand(2, 6)),
             ]),
-            'questions' => Arr::random([
-                // require \resource_path('survay_templates/level-of-satisfaction-01.php'),
-                require \resource_path('survay_templates/nps-01.php'),
-            ]),
+            'questions' => require \resource_path('survay_templates/nps-01.php'),
             'started_at' => fn ($attr) => Arr::random([
                 ($attr['will_start_in'] ?? null),
                 null, null, null, null,
             ]),
-            'limit_to_1_answer' => Arr::random([
-                (bool) (\rand() % 2),
-                (bool) (\rand() % 2),
-                null, null, null, null,
-            ]),
+            'limit_to_1_answer' => \true,
         ];
     }
 }

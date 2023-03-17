@@ -42,25 +42,9 @@ class SurveyAnswerController extends Controller
         $inputNames = [];
         $rules = [];
 
-        $getFlagIds = function (Request $request, &$flag_01, &$flag_02) {
-            // 'hflag_01' or 'hflag_02' is a way to send an identify as base64 hash for flag_01/02
-            $hashedFlag_01 = StringHandler::base64Decode($request->string('hflag_01'));
-            $hashedFlag_02 = StringHandler::base64Decode($request->string('hflag_02'));
-
-            $flag_01 = $hashedFlag_01 ?: $request->string(
-                'flag_01',
-                $request->string('flag_01')
-            );
-
-            $flag_02 = $hashedFlag_02 ?: $request->string(
-                'flag_02',
-                $request->string('flag_02')
-            );
-        };
-
         $flag_01 = $flag_02 = \null;
 
-        $getFlagIds($request, $flag_01, $flag_02);
+        static::getFlagIds($request, $flag_01, $flag_02);
 
         if ($survey->limit_to_1_answer) {
             $rules['flag_01'] = 'required_without:hflag_01|string|min:3';
@@ -185,5 +169,70 @@ class SurveyAnswerController extends Controller
             'success' => true,
             'data' => $survey->getResultList(true),
         ], 200);
+    }
+
+    /**
+     * function answered
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function answered(Request $request): JsonResponse
+    {
+        $request->validate([
+            'survey_id' => 'required|uuid',
+            'flag_01' => 'required_without:hflag_01|string|min:3',
+            'hflag_01' => 'nullable|string|min:3',
+            'flag_02' => 'required_without:hflag_02|string|min:3',
+            'hflag_02' => 'nullable|string|min:3',
+        ]);
+
+        $survey = Survey::whereId($request->input('survey_id'))->first();
+
+        if (!$survey) {
+            return response()->json([], 404);
+        }
+
+        $flag_01 = $flag_02 = \null;
+
+        static::getFlagIds($request, $flag_01, $flag_02);
+
+        $existsAnAnswer = $flag_01 ? $survey->answers()
+            ->where('flag_01', $flag_01)
+            ->where('flag_02', $flag_02)
+            ->exists() : \false;
+
+        return response()->json([
+            'answered' => $existsAnAnswer,
+            'message' => $existsAnAnswer
+                ? 'An answer has already been sent previously.'
+                : 'This survey has not yet been answered.',
+        ], 200);
+    }
+
+    /**
+     * function myFunction
+     *
+     * @param Request $request
+     * @param string &$flag_01
+     * @param string &$flag_02
+     *
+     * @return void
+     */
+    protected static function getFlagIds(Request $request, &$flag_01, &$flag_02): void
+    {
+        // 'hflag_01' or 'hflag_02' is a way to send an identify as base64 hash for flag_01/02
+        $hashedFlag_01 = StringHandler::base64Decode($request->string('hflag_01'));
+        $hashedFlag_02 = StringHandler::base64Decode($request->string('hflag_02'));
+
+        $flag_01 = $hashedFlag_01 ?: $request->string(
+            'flag_01',
+            $request->string('flag_01')
+        );
+
+        $flag_02 = $hashedFlag_02 ?: $request->string(
+            'flag_02',
+            $request->string('flag_02')
+        );
     }
 }

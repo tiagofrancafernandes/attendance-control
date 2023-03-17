@@ -314,4 +314,49 @@ class SurveyAnswerTest extends TestCase
                 ])->etc()
         );
     }
+
+    /**
+     *
+     * @test
+     *
+     * @return void
+     */
+    public function checkIfAnAnswerWasSent()
+    {
+        $flag_01 = 'cli_989';
+        $flag_02 = 'tdd_test|checkIfAnAnswerWasSent';
+
+        $survey = Survey::factory()->createOne([
+            'questions' => require \resource_path('survay_templates/nps-01.php'),
+            'limit_to_1_answer' => \true,
+        ]);
+
+        $postData = [
+            'survey_id' => $survey->id,
+            'rating' => \rand(0, 10), // NPS
+            'flag_01' => $flag_01,
+            'flag_02' => $flag_02,
+            'message' => Str::random(10),
+        ];
+
+        $survey->answers()->create([
+            'survey_id' => $survey->id,
+            'flag_01' => $flag_01,
+            'flag_02' => $flag_02,
+            'answer_data' => $postData,
+        ]);
+
+        /**
+         * @var TestResponse $response
+         */
+        $response = $this->post(
+            \route('surveys.answered'),
+            $postData
+        );
+
+        $response->assertStatus(200);
+
+        $response->assertJsonPath('answered', true);
+        $response->assertJsonPath('message', 'An answer has already been sent previously.');
+    }
 }
