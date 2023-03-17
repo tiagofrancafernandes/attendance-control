@@ -1,0 +1,114 @@
+############################################################################
+## Demo requests
+## For VSCode:
+## REST Client for Visual Studio Code
+## VS Marketplace Link:
+## https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+## @id: humao.rest-client
+############################################################################
+
+@BASE_URL=http://localhost:8000
+
+### Get survey list
+POST {{BASE_URL}}/api/surveys
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer MyAuthToken
+
+{
+    "add_select": ["started_at"]
+}
+
+### Submit new answer (detractors)
+POST {{BASE_URL}}/api/surveys/answers/submit
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer MyAuthToken
+
+{
+    "survey_id": "98b5c111-2c24-4c2b-89c5-68c666bcc44d",
+    "rating": {{$randomInt 0 6}},
+    "flag_01": "cli-{{$randomInt 100 1000}}",
+    "flag_02": "pages/page1.html",
+    "message": "Customer message"
+}
+
+### Submit new answer (passives)
+POST {{BASE_URL}}/api/surveys/answers/submit
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer MyAuthToken
+
+{
+    "survey_id": "98b5c111-2c24-4c2b-89c5-68c666bcc44d",
+    "rating": {{$randomInt 7 8}},
+    "flag_01": "cli-{{$randomInt 100 1000}}",
+    "flag_02": "pages/page1.html",
+    "message": "Customer message"
+}
+
+### Submit new answer promoter (10)
+POST {{BASE_URL}}/api/surveys/answers/submit
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer MyAuthToken
+
+{
+    "survey_id": "98b5c111-2c24-4c2b-89c5-68c666bcc44d",
+    "rating": 10,
+    "flag_01": "cli-{{$randomInt 100 1000}}",
+    "flag_02": "pages/page1.html",
+    "message": "Customer message"
+}
+
+### Submit an answer to an answered survey
+POST {{BASE_URL}}/api/surveys/answers/submit
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer MyAuthToken
+
+{
+    "survey_id": "98b5c111-2c24-4c2b-89c5-68c666bcc44d",
+    "rating": 5,
+    "flag_01": "cli-123",
+    "flag_02": "pages/page1.html",
+    "message": "Customer message"
+}
+
+### Check if a survey was answered
+POST {{BASE_URL}}/api/surveys/answers/answered
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer MyAuthToken
+
+{
+    "survey_id": "98b5c111-2c24-4c2b-89c5-68c666bcc44d",
+    "rating": 5,
+    "flag_01": "cli-123",
+    "flag_02": "pages/page1.html",
+    "message": "Customer message"
+}
+
+### Submit new answer to invalid survey
+POST {{BASE_URL}}/api/surveys/answers/submit
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer MyAuthToken
+
+{
+    "survey_id": "98b5c111-2c24-4c2b-75c9-68c666bcc44d",
+    "rating": 5,
+    "flag_01": "cli-456",
+    "flag_02": "pages/page1.html",
+    "message": "Customer message"
+}
+
+### Get answers for a survey
+POST {{BASE_URL}}/api/surveys/result_list
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer MyAuthToken
+
+{
+    "survey_id": "98b5c111-2c24-4c2b-89c5-68c666bcc44d"
+}
