@@ -5,11 +5,15 @@ namespace Tests\Feature\Api;
 use Tests\TestCase;
 use App\Models\Survey;
 use Illuminate\Support\Str;
+use App\Models\SurveyAnswer;
 use Illuminate\Testing\TestResponse;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SurveyAnswerTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      *
      * @test
@@ -243,7 +247,7 @@ class SurveyAnswerTest extends TestCase
         ]);
 
         $ratings = [
-            0 => 5,
+            1 => 5,
             2 => 4,
             3 => 1,
             5 => 5,
@@ -261,21 +265,17 @@ class SurveyAnswerTest extends TestCase
 
             foreach (range(1, $count) as $ii) {
                 $postData = [
-                    'survey_id' => $survey->id,
                     'rating' => $rating, // NPS
-                    'flag_01' => "cli_997{$inc}{$ii}",
-                    'flag_02' => 'tdd_test|getSurveyResultList',
                     'message' => null,
                 ];
 
-                $survey->answers()->create(
-                    \array_merge(
-                        $postData,
-                        [
-                            'answer_data' => $postData,
-                        ]
-                    )
-                );
+                SurveyAnswer::factory()->createOne([
+                    'survey_id' => $survey->id,
+                    'campaign_id' => $survey->campaign_id,
+                    'answer_data' => $postData,
+                    'flag_01' => "cli_997{$inc}{$ii}",
+                    'flag_02' => 'tdd_test|getSurveyResultList',
+                ]);
 
                 $inc++;
             }
@@ -294,7 +294,7 @@ class SurveyAnswerTest extends TestCase
         $response->assertJsonCount(2);
         $response->assertJsonCount(3, 'data');
 
-        $response->assertJsonPath('data.answer_values.rating.0', 5);
+        $response->assertJsonPath('data.answer_values.rating.1', 5);
         $response->assertJsonPath('data.answer_values.rating.2', 4);
         $response->assertJsonPath('data.answer_values.rating.3', 1);
         $response->assertJsonPath('data.answer_values.rating.5', 5);

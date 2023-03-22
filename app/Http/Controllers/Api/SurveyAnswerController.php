@@ -159,6 +159,9 @@ class SurveyAnswerController extends Controller
             'survey_id' => 'required|uuid',
         ]);
 
+        /**
+         * @var ?Survey $survey
+         */
         $survey = Survey::whereId($request->input('survey_id'))->first();
 
         if (!$survey) {

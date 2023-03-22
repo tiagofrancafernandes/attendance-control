@@ -38,7 +38,7 @@ class SurveyQuestions extends Base
         $this->questions = $this->collectAll($survey->questions);
         $this->answers = $survey->answers();
         $this->inputs = $this->collectAll($this->questions->get('inputs'));
-        $this->title = $this->collectAll($this->questions)->get('title');
+        $this->title = $this->collectAll($this->questions->get('title'));
 
         return $this;
     }

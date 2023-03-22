@@ -7,7 +7,10 @@
 ## @id: humao.rest-client
 ############################################################################
 
-@BASE_URL=http://localhost:8000
+########### VARS ##################
+# @BASE_URL=http://localhost:8000
+@BASE_URL={{ $dotenv REST_BASE_URL }}
+########### VARS ##################
 
 ### Get survey list
 POST {{BASE_URL}}/api/surveys
@@ -111,4 +114,47 @@ Authorization: Bearer MyAuthToken
 
 {
     "survey_id": "98b5c111-2c24-4c2b-89c5-68c666bcc44d"
+}
+
+### Register
+POST {{BASE_URL}}/api/__/auth/register
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer MyAuthToken
+
+{
+    "name": "testuser",
+    "email": "testuser-{{$randomInt 100 1000}}@email.com",
+    "password": "pass123.",
+    "password_confirmation": "pass123."
+}
+
+### Login
+POST {{BASE_URL}}/api/__/auth/login
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer MyAuthToken
+
+{
+    "email": "testuser-863@email.com",
+    "password": "pass123."
+}
+
+### User info
+POST {{ $dotenv REST_BASE_URL }}/api/user
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer Ihb2gaEpG9m98YaiIwrU0bqyPBqAjHox8Ip2PVmK
+
+{
+    "select": ["id", "name"]
+}
+
+### Logout
+POST {{BASE_URL}}/api/__/auth/logout
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer Ihb2gaEpG9m98YaiIwrU0bqyPBqAjHox8Ip2PVmK
+
+{
 }

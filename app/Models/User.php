@@ -4,11 +4,12 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 /**
  * App\Models\User
@@ -57,6 +58,18 @@ class User extends Authenticatable
     use HasUuids;
 
     /**
+     * The attributes to return.
+     *
+     * @var array<int, string>
+     */
+    protected $defaultKeysToReturn = [
+        'id',
+        'name',
+        'email',
+        'email_verified_at',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -85,4 +98,61 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * function returnOnly
+     *
+     * @param ?array $keysToReturn
+     * @return mixed
+     */
+    public function returnOnly(?array $keysToReturn = \null): mixed
+    {
+        $keysToReturn = \array_filter(
+            ($keysToReturn ?: $this->defaultKeysToReturn),
+            fn ($key) => !\in_array($key, $this->hidden, true),
+            \ARRAY_FILTER_USE_KEY
+        );
+
+        if (!$keysToReturn) {
+            return $this;
+        }
+
+        return $this->only($keysToReturn);
+    }
+
+    /**
+     * Create a new personal access token for the user.
+     *
+     * @param  ?string  $tokenName
+     * @param  array  $abilities [TODO]
+     * @param  \DateTimeInterface|null  $expiresAt [TODO]
+     *
+     * @return ?string
+     */
+    public function plainTextToken(
+        ?string $tokenName,
+        array $abilities = ['*'],
+        ?DateTimeInterface $expiresAt = null
+    ) {
+        $tokenName = \trim((string) $tokenName);
+        $tokenName = $tokenName ?: Str::snake("User::plainTextToken {$this->email}");
+
+        try {
+            $token = $this->createToken(
+                $tokenName,
+                $abilities,
+                $expiresAt
+            );
+
+            return explode('|', $token->plainTextToken)[1] ?? \null;
+        } catch (\Throwable $th) {
+            if (!app()->environment(['production', 'beta'])) {
+                throw $th;
+            }
+
+            \Log::error($th);
+
+            return null;
+        }
+    }
 }
