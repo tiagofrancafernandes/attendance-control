@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('__/auth')->group(function () {
     require __DIR__ . '/auth.php';
-})->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+});
 
 Route::middleware(['auth:sanctum'])->post(
     '/user',
